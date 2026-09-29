@@ -1,0 +1,88 @@
+{
+ "_doc": "Decisiones de mapeo confirmadas por Hector Clavijo - tratamiento CAR cobertura IPERC administrativos",
+ "equivalencias": {
+  "QSE & OPERATIONAL EXCELLENCE MANAGER": {
+   "cargo_hc": "GERENTE DE CALIDAD Y CERTIFICACIONES",
+   "area_hc": "QSE & Operational Excellence",
+   "matriz": "GE-SO-CC-D1",
+   "nota": "Mismo puesto, distinta denominacion entre matriz y head count"
+  },
+  "ENFERMERO OCUPACIONAL": {
+   "cargo_hc": "ENFERMERA/O",
+   "area_hc": "ADM-L&RH",
+   "matriz": "GE-SO-SF-D1",
+   "nota": "Misma funcion, denominacion en masculino/ocupacional"
+  },
+  "GERENTE TECNOLOGICO": {
+   "cargo_hc": "REGIONAL IT  MANAGER",
+   "area_hc": "IT&FIN",
+   "matriz": "GE-SO-IT-D1",
+   "nota": "Mismo puesto, denominacion distinta"
+  },
+  "ANALISTA DE DESARROLLO Y SISTEMA": {
+   "cargo_hc": "ASISTENTE DE DESARROLLO DE SISTEMA",
+   "area_hc": "IT&FIN",
+   "matriz": "GE-SO-IT-D1",
+   "nota": "Mismo puesto, la matriz dice Analista y el head count Asistente"
+  },
+  "INGENIERO DE DISENO E INGENIERIA": {
+   "cargo_hc": "INGENIERO DE DISEÑO",
+   "area_hc": "Engicore",
+   "matriz": "GE-SO-PGS-D1",
+   "nota": "Mismo puesto"
+  },
+  "AUXILIAR DE SERVICIOS DE SALUD": {
+   "cargo_hc": "AUXILIAR ADMINISTRATIVO",
+   "area_hc": "ADM-L&RH",
+   "matriz": "GE-SO-SF-D1",
+   "nota": "En el head count consta como AUXILIAR ADMINISTRATIVO. La denominacion 'Auxiliar de servicios de salud' se uso solo a efectos de la matriz de Salud Ocupacional. Corresponde al auxiliar administrativo asignado a ADM-L&RH (1 persona); los 5 de Operaciones estan cubiertos por GE-SO-MA-D1."
+  },
+  "ANALISTA COMPRAS": {
+   "cargo_hc": "ANALISTA DE COMPRAS",
+   "area_hc": "Operaciones",
+   "matriz": "GE-SO-SC-D1",
+   "nota": "Mismo puesto, la matriz omite la preposicion"
+  },
+  "ANALISTA SUPPLY CHAIN": {
+   "cargo_hc": "ANALISTA DE SUPPLY CHAIN",
+   "area_hc": "Operaciones",
+   "matriz": "GE-SO-SC-D1",
+   "nota": "Mismo puesto, la matriz omite la preposicion. Evaluado intencionalmente en DOS matrices (GE-SO-PO-D1 y GE-SO-SC-D1): confirmado correcto por Hector, no es duplicidad a corregir."
+  },
+  "JEFE DE COMPRAS": {
+   "cargo_hc": "JEFE DE COMPRAS E IMPORTACIONES",
+   "area_hc": "Operaciones",
+   "matriz": "GE-SO-SC-D1",
+   "nota": "Mismo puesto, confirmado por Hector"
+  }
+ },
+ "cargos_nuevos_no_en_headcount": {
+  "JEFE DE CONTABILIDAD E IMPUESTOS": {
+   "area_hc": "IT&FIN",
+   "matriz": "GE-SO-FI-D1",
+   "estado": "ANALIZADO en matriz / NO CONSTA en head count V1.1",
+   "accion": "Incorporar el cargo a la base de head count"
+  },
+  "PEOPLE OPERATIONS PARTNER": {
+   "area_hc": "ADM-L&RH",
+   "matriz": "GE-SO-TH-D1",
+   "lineas_riesgo": 42,
+   "estado": "ANALIZADO en matriz / NO CONSTA en head count V1.1",
+   "accion": "Incorporar el cargo a la base de head count"
+  }
+ },
+ "cargos_obsoletos_a_eliminar": {
+  "COORDINADOR DE TESORERIA": {
+   "matriz": "GE-SO-FI-D1",
+   "lineas_riesgo": 6,
+   "estado": "CARGO INEXISTENTE - suprimido de la estructura",
+   "accion": "ELIMINAR el bloque completo de la matriz GE-SO-FI-D1"
+  }
+ },
+ "pendientes": {
+  "COORDINADOR DE EXCELENCIA OPERACIONAL": {
+   "area_hc": "QSE & Operational Excellence",
+   "estado": "TIENE MATRIZ PROPIA - PENDIENTE DE RECIBIR"
+  }
+ }
+}
