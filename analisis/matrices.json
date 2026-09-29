@@ -254,5 +254,21 @@
     "Jefe de Compras": 13
    }
   }
+ ],
+ "7d905433-GE-SO-CI-D1_-_Control_de_Inventarios.xlsx": [
+  {
+   "hoja": "Matriz IPERC",
+   "codigo": "GE-SO-CI-D1",
+   "meta": {
+    "EMPRESA": "PLANTACIONES DE BALSA PLANTABAL S.A.",
+    "PUESTO DE TRABAJO A EVALUAR": "Técnico de Inventario"
+   },
+   "fila_encabezado": 9,
+   "filas_datos": 24,
+   "puestos": {
+    "Técnico de Inventario": 14,
+    "Analista de Inventario": 10
+   }
+  }
  ]
 }

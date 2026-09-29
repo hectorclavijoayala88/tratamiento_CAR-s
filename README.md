@@ -20,9 +20,9 @@ identificación de peligros y evaluación de riesgos (matriz IPERC, metodología
 
 ## Estado
 
-- **50 de 70 cargos** analizados (71%)
-- **72 de 101 personas** cubiertas (71%)
-- **14 matrices** procesadas
+- **52 de 70 cargos** analizados (74%)
+- **76 de 101 personas** cubiertas (75%)
+- **15 matrices** procesadas
 - Áreas conformes: ADM-L&RH, ESG/Lab, Engicore
 
 ## Criterios del universo
