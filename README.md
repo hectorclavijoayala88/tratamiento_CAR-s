@@ -9,13 +9,24 @@ Nació como respuesta a una CAR y quedó convertido en control mensual.
 
 ## Uso mensual
 
-Cada vez que llega el head count nuevo:
+Cada vez que llega el head count nuevo, basta con eso:
+
+```bash
+python3 analisis/control_mensual.py --hc "HeadCount_del_mes.xlsx"
+```
+
+Las matrices no hace falta volver a pasarlas: sus datos quedan guardados en
+`analisis/catalogo_matrices.json`. Solo se indican cuando hay una matriz nueva
+o cuando alguna se modificó:
 
 ```bash
 python3 analisis/control_mensual.py \
     --hc "HeadCount_del_mes.xlsx" \
-    --matrices carpeta_con_las_matrices/
+    --matrices matrices_nuevas/
 ```
+
+En ese caso el catálogo se actualiza solo: las matrices con código nuevo se
+incorporan y las de código ya conocido se reemplazan por la versión recién leída.
 
 **No requiere que el head count traiga tabla dinámica.** El script localiza por sí
 mismo la hoja con la base nominal buscando sus encabezados, sin importar cómo se
@@ -25,8 +36,9 @@ Opciones:
 
 | Opción | Para qué |
 |---|---|
-| `--matrices carpeta/` | Toma todos los .xlsx de la carpeta |
-| `--matrices a.xlsx b.xlsx` | Toma archivos sueltos |
+| *(sin `--matrices`)* | Usa el catálogo guardado |
+| `--matrices carpeta/` | Lee los .xlsx de la carpeta y actualiza el catálogo |
+| `--matrices a.xlsx b.xlsx` | Lee archivos sueltos y actualiza el catálogo |
 | `--out nombre.xlsx` | Cambia el nombre de salida |
 | `--sin-comparar` | Omite la comparación con el corte anterior |
 
@@ -103,7 +115,6 @@ alimentan la hoja de observaciones.
 | Archivo | Función |
 |---|---|
 | `analisis/control_mensual.py` | Script único del control mensual |
+| `analisis/catalogo_matrices.json` | Puestos extraídos de cada matriz IPERC, para no volver a subirlas |
 | `analisis/equivalencias.json` | Equivalencias y hallazgos documentales validados |
 | `analisis/snapshots/` | Fotos del universo de cada corte, para comparar |
-| `analisis/extraer.py`, `cruce.py`, `generar.py` | Scripts originales del análisis de la CAR |
-| `analisis/headcount_adm.json`, `matrices.json` | Datos del corte de la CAR |

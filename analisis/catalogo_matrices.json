@@ -1,0 +1,179 @@
+{
+ "actualizado": "2026-09-29",
+ "matrices": [
+  {
+   "codigo": "GE-SO-FI-D1",
+   "proceso": "Finanzas",
+   "puestos": {
+    "Coordinador Contable y de Impuestos": 7,
+    "Analista financiero": 4,
+    "Coordinador Contable": 8,
+    "Jefe de Contabilidad e Impuestos": 9,
+    "Coordinador de Tesoreria": 6
+   },
+   "filas_datos": 34,
+   "archivo": "109ebe9e-GE-SO-FI-D1_-_Finanzas.xlsx"
+  },
+  {
+   "codigo": "GE-SO-BL-D1",
+   "proceso": "LABORATORIO DE MATERIALES",
+   "puestos": {
+    "Supervisor de Laboratorio": 9,
+    "Técnico de Laboratorio": 9
+   },
+   "filas_datos": 18,
+   "archivo": "1e595cdb-GE-SO-BL-D1_-_Matriz_Laboratorio.xlsx"
+  },
+  {
+   "codigo": "GE-SO-PO-D1",
+   "proceso": "Planificación y Logística",
+   "puestos": {
+    "Jefe de Planificación y Logística": 11,
+    "Coordinador de Supply Chain": 6,
+    "Programador de Producción": 8,
+    "Analista de Supply Chain": 6
+   },
+   "filas_datos": 31,
+   "archivo": "1fa9982d-GE-SO-PO-D1_-_Planificaci_n_y_Log_stica.xlsx"
+  },
+  {
+   "codigo": "GE-SO-CC-D1",
+   "proceso": "Calidad",
+   "puestos": {
+    "QSE & Operational Excellence Manager": 23,
+    "Coordinador de calidad": 57,
+    "Analista de calidad": 57,
+    "Técnico de calidad": 58
+   },
+   "filas_datos": 195,
+   "archivo": "217d3787-GE-SO-CC-D1_-_Calidad.xlsx"
+  },
+  {
+   "codigo": "GE-SO-MA-D1",
+   "proceso": "Mantenimiento - Administrativos",
+   "puestos": {
+    "Gerente JR de mantenimiento": 20,
+    "Jefe de mantenimiento": 42,
+    "Planificador de mantenimiento": 21,
+    "Supervisor de mantenimiento": 38,
+    "Auxiliar administrativo": 35
+   },
+   "filas_datos": 156,
+   "archivo": "271a4bea-GE-SO-MA-D1_-_Mantenimiento.xlsx"
+  },
+  {
+   "codigo": "GE-SO-CE-D1",
+   "proceso": "Certificaciones",
+   "puestos": {
+    "Coordinador/a de Certificaciones": 21,
+    "Técnico de Certificaciones": 21,
+    "Especialista de Certificaciones": 19
+   },
+   "filas_datos": 61,
+   "archivo": "5e1ba2e8-GE-SO-CE-D1_-_Certificaciones.xlsx"
+  },
+  {
+   "codigo": "GE-SO-IT-D1",
+   "proceso": "Help Desk",
+   "puestos": {
+    "Help Desk": 10,
+    "Desarrollador JR": 6,
+    "Gerente tecnologico": 6,
+    "Analista de desarrollo y sistema": 5
+   },
+   "filas_datos": 27,
+   "archivo": "7794a690-GE-SO-IT-D1_-_IT.xlsx"
+  },
+  {
+   "codigo": "GE-SO-CI-D1",
+   "proceso": "Técnico de Inventario",
+   "puestos": {
+    "Técnico de Inventario": 14,
+    "Analista de Inventario": 10
+   },
+   "filas_datos": 24,
+   "archivo": "7d905433-GE-SO-CI-D1_-_Control_de_Inventarios.xlsx"
+  },
+  {
+   "codigo": "GE-SO-LE-D1",
+   "proceso": "Legal",
+   "puestos": {
+    "Asistente Legal": 11,
+    "Analista Legal": 10,
+    "Coordinador/a de Asuntos Legales": 10
+   },
+   "filas_datos": 31,
+   "archivo": "904e5c44-GE-SO-LE-D1_-_Legal.xlsx"
+  },
+  {
+   "codigo": "GE-SO-PY-D1",
+   "proceso": "Proyectos",
+   "puestos": {
+    "Jefe de Proyectos": 20,
+    "Ingeniero de Proyectos": 15,
+    "Analista de Proyectos": 16
+   },
+   "filas_datos": 51,
+   "archivo": "933cde5a-GE-SO-PY-D1_-_Proyectos.xlsx"
+  },
+  {
+   "codigo": "GE-SO-SC-D1",
+   "proceso": "Compras",
+   "puestos": {
+    "Analista Supply Chain": 13,
+    "Analista Compras": 14,
+    "Jefe de Compras": 13
+   },
+   "filas_datos": 40,
+   "archivo": "9c752964-GE-SO-SC-D1_-_Compras.xlsx"
+  },
+  {
+   "codigo": "GE-SO-EHS-D1",
+   "proceso": "EHS",
+   "puestos": {
+    "Ingeniero de seguridad y ambiente": 13,
+    "Tecnico de seguridad y ambiente": 16
+   },
+   "filas_datos": 29,
+   "archivo": "a5c35af4-GE-SO-EHS-D1-_EHS.xlsx"
+  },
+  {
+   "codigo": "GE-SO-TH-D1",
+   "proceso": "RECURSOS HUMANOS",
+   "puestos": {
+    "HR DIRECTOR AMERICAS": 36,
+    "HR BUSINNES PARTNER AMERICAS": 42,
+    "BUSINNES PARTNER DE RECURSOS HUMANOS": 28,
+    "COORDINADORA DE DESARROLLO ORGANIZACIONAL": 49,
+    "PEOPLE OPERATIONS PARTNER": 42,
+    "ANALISTA DE RECURSOS HUMANOS": 72,
+    "ANALISTA DE RECURSOS HUMANOS Y NÓMINA": 28,
+    "ANALISTA DE DESARROLLO ORGANIZACIONAL": 42
+   },
+   "filas_datos": 339,
+   "archivo": "b206b7b5-GE-SO-TH-D1_-_RRHH.xlsx"
+  },
+  {
+   "codigo": "GE-SO-SF-D1",
+   "proceso": "Salud Ocupacional",
+   "puestos": {
+    "Medico Ocupacional": 18,
+    "Enfermero Ocupacional": 10,
+    "Auxiliar de servicios de salud": 11
+   },
+   "filas_datos": 39,
+   "archivo": "cf092d8f-GE-SO-SF-D1_-_Salud_ocupacional.xlsx"
+  },
+  {
+   "codigo": "GE-SO-PGS-D1",
+   "proceso": "Engicore",
+   "puestos": {
+    "Jefe de Diseño e Ingenieria": 9,
+    "Ingeniero de Diseño e Ingenieria": 14,
+    "Analista de Diseño e Ingenieria": 9
+   },
+   "filas_datos": 32,
+   "archivo": "f4a8175b-GE-SO-PGS-D1_-_Engicore.xlsx"
+  }
+ ]
+}

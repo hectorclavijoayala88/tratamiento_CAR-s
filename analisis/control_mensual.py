@@ -340,10 +340,36 @@ def comparar(universo):
               ensure_ascii=False, indent=1)
     return cambios
 
+CATALOGO = os.path.join(BASE, "catalogo_matrices.json")
+
+def cargar_catalogo():
+    if not os.path.exists(CATALOGO): return []
+    return json.load(open(CATALOGO, encoding="utf-8")).get("matrices", [])
+
+def fecha_catalogo():
+    if not os.path.exists(CATALOGO): return "-"
+    return json.load(open(CATALOGO, encoding="utf-8")).get("actualizado", "-")
+
+def fusionar_catalogo(nuevas):
+    """Incorpora las matrices leidas al catalogo: las de igual codigo se reemplazan."""
+    cat = {m["codigo"]: m for m in cargar_catalogo()}
+    altas = [m["codigo"] for m in nuevas if m["codigo"] not in cat]
+    reemp = [m["codigo"] for m in nuevas if m["codigo"] in cat]
+    for m in nuevas: cat[m["codigo"]] = m
+    json.dump({"actualizado": datetime.date.today().strftime("%Y-%m-%d"),
+               "matrices": list(cat.values())},
+              open(CATALOGO, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    if altas: print(f"  Catalogo: {len(altas)} matriz(ces) incorporada(s): {', '.join(altas)}")
+    if reemp: print(f"  Catalogo: {len(reemp)} matriz(ces) actualizada(s): {', '.join(reemp)}")
+    print(f"  Catalogo guardado con {len(cat)} matrices en total")
+    return list(cat.values())
+
 def main():
     ap = argparse.ArgumentParser(description="Control mensual de cobertura IPERC")
     ap.add_argument("--hc", required=True, help="Head count del mes (.xlsx)")
-    ap.add_argument("--matrices", required=True, nargs="+", help="Carpeta o archivos de matrices IPERC")
+    ap.add_argument("--matrices", nargs="+", default=None,
+                    help="Carpeta o archivos de matrices IPERC. Si se omite, se usa el "
+                         "catalogo guardado en analisis/catalogo_matrices.json")
     ap.add_argument("--out", default="Cobertura_IPERC_Administrativos_CAR.xlsx")
     ap.add_argument("--sin-comparar", action="store_true")
     a = ap.parse_args()
@@ -352,21 +378,32 @@ def main():
     universo = leer_headcount(a.hc)
     if not universo: sys.exit("ERROR: el universo quedo vacio. Revisa los criterios o el archivo.")
 
-    print("\n[2/4] Leyendo matrices IPERC …")
-    rutas = []
-    for m in a.matrices:
-        rutas += sorted(glob.glob(os.path.join(m, "*.xlsx"))) if os.path.isdir(m) else sorted(glob.glob(m))
-    rutas = [r for r in rutas if not os.path.basename(r).startswith("~$")]
-    matrices = []
-    for r in rutas:
-        try:
-            ms = extraer_matriz(r)
-            if not ms: print(f"  AVISO: {os.path.basename(r)} no parece una matriz IPERC (se omite)")
-            for m in ms: print(f"  {m['codigo']:<14} {m['proceso']:<32} {len(m['puestos'])} puestos")
-            matrices += ms
-        except Exception as e:
-            print(f"  ERROR leyendo {os.path.basename(r)}: {e}")
-    if not matrices: sys.exit("ERROR: no se pudo leer ninguna matriz.")
+    if a.matrices:
+        print("\n[2/4] Leyendo matrices IPERC …")
+        rutas = []
+        for m in a.matrices:
+            rutas += sorted(glob.glob(os.path.join(m, "*.xlsx"))) if os.path.isdir(m) else sorted(glob.glob(m))
+        rutas = [r for r in rutas if not os.path.basename(r).startswith("~$")]
+        matrices = []
+        for r in rutas:
+            try:
+                ms = extraer_matriz(r)
+                if not ms: print(f"  AVISO: {os.path.basename(r)} no parece una matriz IPERC (se omite)")
+                for m in ms: print(f"  {m['codigo']:<14} {m['proceso']:<32} {len(m['puestos'])} puestos")
+                matrices += ms
+            except Exception as e:
+                print(f"  ERROR leyendo {os.path.basename(r)}: {e}")
+        if not matrices: sys.exit("ERROR: no se pudo leer ninguna matriz.")
+        matrices = fusionar_catalogo(matrices)
+    else:
+        print("\n[2/4] Usando el catalogo de matrices guardado …")
+        matrices = cargar_catalogo()
+        if not matrices:
+            sys.exit("ERROR: no hay catalogo guardado y no se indicaron matrices.\n"
+                     "       Ejecuta una vez con --matrices <carpeta> para crearlo.")
+        print(f"  Catalogo: {len(matrices)} matrices  (actualizado el {fecha_catalogo()})")
+        for m in sorted(matrices, key=lambda x: x["codigo"]):
+            print(f"  {m['codigo']:<14} {m['proceso']:<32} {len(m['puestos'])} puestos")
 
     print("\n[3/4] Comparando con el corte anterior …")
     cambios = [] if a.sin_comparar else comparar(universo)
