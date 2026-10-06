@@ -105,10 +105,10 @@ alimentan la hoja de observaciones.
 
 ## Estado del último corte
 
-- **52 de 70 cargos** analizados (74%)
-- **76 de 101 personas** cubiertas (75%)
-- **15 matrices** procesadas
-- Áreas conformes: ADM-L&RH, ESG/Lab, Engicore
+- **55 de 70 cargos** analizados (79%)
+- **80 de 101 personas** cubiertas (79%)
+- **17 matrices** procesadas
+- Áreas conformes: ADM-L&RH, ESG/Lab, Engicore, QSE & Operational Excellence
 
 ## Archivos
 
