@@ -57,8 +57,10 @@ Requiere `openpyxl` (`pip install openpyxl`).
 | 5. Observaciones | Equivalencias, cargos nuevos y cargos obsoletos |
 | 6. Trazabilidad | Matrices analizadas, sus puestos y líneas de riesgo |
 | 7. Cambios del mes | Altas, bajas y variaciones de dotación frente al corte anterior |
+| 8. Cargos por clasificar | Cargos del head count que no figuran en el catálogo |
 
-La hoja 7 aparece solo cuando existe un corte anterior con el cual comparar.
+Las hojas 7 y 8 aparecen solo cuando hay algo que reportar: la 7 cuando existe un
+corte anterior con el cual comparar, la 8 cuando algún cargo quedó sin clasificar.
 
 ## Control de cambios
 
@@ -76,14 +78,41 @@ compara con la del mes anterior. Detecta en ambos sentidos:
 Se excluye del head count:
 
 - Área `Silvicultura - Abastecimiento` (personal de campo)
-- Jerarquías `BC Workers` y `BC Leaders` (personal operativo)
-- Localidades distintas de Quevedo y Samborondón
+- Localidades distintas de Quevedo y Samborondón (Santo Domingo queda fuera)
 - Personal con Localidad Principal `High Point`
+- Cargos clasificados como operativos en `analisis/cargos_administrativos.json`
 
 El cruce se hace por el par **área + cargo**, ya que hay cargos presentes en más de un área.
 
-Para cambiar un criterio, edita las constantes al inicio de `control_mensual.py`
-(`AREAS_EXCLUIDAS`, `JERARQUIAS_EXCLUIDAS`, `LOCALIDADES_INCLUIDAS`, `LOCALIDADP_EXCLUIDAS`).
+Para cambiar un criterio geográfico o de área, edita las constantes al inicio de
+`control_mensual.py` (`AREAS_EXCLUIDAS`, `LOCALIDADES_INCLUIDAS`, `LOCALIDADP_EXCLUIDAS`).
+
+### Por qué no se usa la columna de jerarquía
+
+Hasta septiembre de 2026 el universo se delimitaba excluyendo las jerarquías
+`BC Workers` y `BC Leaders`. **Ese criterio se abandonó**: desde el corte de octubre
+de 2026 el head count entrega esa columna desalineada respecto al cargo. En ese
+archivo el Gerente General, el Director de Operaciones y el Director Financiero
+aparecen como `BC Workers`, los únicos dos `Top Management` son un Operador
+Industrial y un Auxiliar de Producción, y `TRABAJADOR FORESTAL` se reparte entre
+ocho jerarquías distintas. De 119 cargos comunes con el corte anterior, 111
+cambiaron de clasificación.
+
+La clasificación se sostiene ahora en el catálogo de cargos, validado cargo por
+cargo. Un cargo que no figure en él queda **fuera** del universo y se reporta en
+la hoja `8. Cargos por clasificar`, para que la decisión sea explícita y no un
+descarte silencioso.
+
+### Clasificar un cargo nuevo
+
+Agrégalo a la lista que corresponda en `analisis/cargos_administrativos.json`:
+
+```json
+{
+  "administrativos": ["...", "CARGO NUEVO"],
+  "operativos": ["...", "OTRO CARGO"]
+}
+```
 
 ## Equivalencias de denominación
 
@@ -105,10 +134,12 @@ alimentan la hoja de observaciones.
 
 ## Estado del último corte
 
-- **55 de 70 cargos** analizados (79%)
-- **80 de 101 personas** cubiertas (79%)
+Corte de octubre de 2026:
+
+- **57 de 71 cargos** analizados (80%)
+- **79 de 99 personas** cubiertas (80%)
 - **17 matrices** procesadas
-- Áreas conformes: ADM-L&RH, ESG/Lab, Engicore, QSE & Operational Excellence
+- Áreas conformes: ESG/Lab, Engicore, QSE & Operational Excellence
 
 ## Archivos
 
@@ -116,5 +147,6 @@ alimentan la hoja de observaciones.
 |---|---|
 | `analisis/control_mensual.py` | Script único del control mensual |
 | `analisis/catalogo_matrices.json` | Puestos extraídos de cada matriz IPERC, para no volver a subirlas |
+| `analisis/cargos_administrativos.json` | Clasificación administrativo / operativo de cada cargo |
 | `analisis/equivalencias.json` | Equivalencias y hallazgos documentales validados |
 | `analisis/snapshots/` | Fotos del universo de cada corte, para comparar |

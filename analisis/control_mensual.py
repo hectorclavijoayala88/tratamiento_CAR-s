@@ -25,10 +25,23 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SNAP = os.path.join(BASE, "snapshots")
 
 # ───────────────────────── criterios del universo ─────────────────────────
-AREAS_EXCLUIDAS      = {"SILVICULTURA - ABASTECIMIENTO"}
-JERARQUIAS_EXCLUIDAS = {"BC WORKERS", "BC LEADERS"}
-LOCALIDADES_INCLUIDAS= {"QUEVEDO", "SAMBORONDON"}
-LOCALIDADP_EXCLUIDAS = {"HIGH POINT"}
+AREAS_EXCLUIDAS       = {"SILVICULTURA - ABASTECIMIENTO"}
+LOCALIDADES_INCLUIDAS = {"QUEVEDO", "SAMBORONDON"}
+LOCALIDADP_EXCLUIDAS  = {"HIGH POINT"}
+CARGOS = os.path.join(BASE, "cargos_administrativos.json")
+
+def cargar_cargos():
+    """Catalogo que separa cargos administrativos de operativos.
+
+    Sustituye al filtro por jerarquia: el head count dejo de traer esa columna
+    de forma confiable (jefaturas clasificadas como BC Workers y operarios como
+    Top Management), de modo que la clasificacion se sostiene en este catalogo.
+    """
+    if not os.path.exists(CARGOS):
+        sys.exit(f"ERROR: falta {CARGOS}, necesario para clasificar los cargos.")
+    d = json.load(open(CARGOS, encoding="utf-8"))
+    return ({norm(c) for c in d.get("administrativos", [])},
+            {norm(c) for c in d.get("operativos", [])})
 
 def norm(s):
     s = " ".join(str(s or "").strip().upper().split())
@@ -44,7 +57,7 @@ def norm(s):
 ALIAS = {
     "area":       ["AREA", "ÁREA", "DEPARTAMENTO"],
     "cargo":      ["CARGO", "PUESTO", "DENOMINACION DEL CARGO"],
-    "jerarquia":  ["JERARQUIA", "JERARQUÍA", "NIVEL", "BANDA"],
+    "jerarquia":  ["JERARQUIA2", "JERARQUIA", "JERARQUÍA", "NIVEL", "BANDA"],
     "localidad":  ["LOCALIDAD", "SEDE", "UBICACION"],
     "localidadP": ["LOCALIDADP", "LOCALIDAD P", "LOCALIDAD PRINCIPAL"],
     "cc":         ["CENTRO DE COSTO", "CENTRO DE COSTOS", "CC"],
@@ -74,7 +87,7 @@ def localizar_base(path):
         sys.exit("ERROR: no se encontro ninguna hoja con columnas 'Area' y 'Cargo'.\n"
                  "       Revisa que el head count incluya la base nominal.")
     (_, ws, fila, idx) = mejor
-    faltan = [k for k in ("jerarquia", "localidad") if k not in idx]
+    faltan = [k for k in ("localidad",) if k not in idx]
     if faltan:
         print(f"  AVISO: no se hallaron las columnas {faltan}. "
               f"Los criterios que dependen de ellas no se aplicaran.")
@@ -83,26 +96,38 @@ def localizar_base(path):
 def leer_headcount(path):
     ws, fila, idx = localizar_base(path)
     print(f"  Base nominal: hoja '{ws.title}', encabezados en fila {fila}")
+    ADMIN, OPER = cargar_cargos()
     G = lambda r, k: (str(r[idx[k]]).strip() if k in idx and r[idx[k]] is not None else "")
-    total = incl = 0; motivos = Counter(); universo = []
+    total = incl = 0; motivos = Counter(); universo = []; sin_clasificar = defaultdict(Counter)
     for r in ws.iter_rows(min_row=fila + 1, values_only=True):
         if not any(v not in (None, "") for v in r): continue
         if not G(r, "cargo"): continue
         total += 1
-        if norm(G(r, "area")) in AREAS_EXCLUIDAS:            motivos["Area excluida (Silvicultura)"] += 1; continue
-        if norm(G(r, "jerarquia")) in JERARQUIAS_EXCLUIDAS:  motivos["Jerarquia operativa (BC Workers/Leaders)"] += 1; continue
+        if norm(G(r, "area")) in AREAS_EXCLUIDAS:
+            motivos["Area excluida (Silvicultura)"] += 1; continue
         if "localidad" in idx and norm(G(r, "localidad")) not in LOCALIDADES_INCLUIDAS:
             motivos["Localidad fuera de alcance"] += 1; continue
         if "localidadP" in idx and norm(G(r, "localidadP")) in LOCALIDADP_EXCLUIDAS:
             motivos["Localidad principal High Point"] += 1; continue
+        cn = norm(G(r, "cargo"))
+        if cn in OPER:
+            motivos["Cargo operativo (segun catalogo)"] += 1; continue
+        if cn not in ADMIN:
+            motivos["Cargo SIN CLASIFICAR en el catalogo"] += 1
+            sin_clasificar[(G(r, "area"), G(r, "cargo"))][G(r, "localidad")] += 1
+            continue
         incl += 1
         universo.append({"area": G(r, "area"), "cargo": G(r, "cargo"),
-                         "cargo_norm": norm(G(r, "cargo")), "cc": G(r, "cc"),
-                         "jerarquia": G(r, "jerarquia"), "tipo": G(r, "tipo"),
+                         "cargo_norm": cn, "cc": G(r, "cc"), "tipo": G(r, "tipo"),
+                         "jerarquia": G(r, "jerarquia"),
                          "localidad": G(r, "localidad"), "localidadP": G(r, "localidadP")})
     print(f"  Registros leidos: {total}  ->  dentro del alcance: {incl}")
     for m, n in motivos.most_common(): print(f"     - excluidos por {m}: {n}")
-    return universo
+    if sin_clasificar:
+        print(f"  ATENCION: {len(sin_clasificar)} cargo(s) sin clasificar quedaron FUERA del universo.")
+        print(f"            Se listan en la hoja 'Cargos por clasificar' del consolidado.")
+        print(f"            Para incorporarlos, agregalos en {os.path.basename(CARGOS)}.")
+    return universo, sin_clasificar
 
 def extraer_matriz(path):
     """Lee una matriz IPERC (GTC 45) y devuelve los puestos evaluados."""
@@ -177,7 +202,7 @@ def hoja(wb, nombre, titulo, cols, filas, anchos):
     if filas: ws.auto_filter.ref = f"A4:{get_column_letter(len(cols))}{4+len(filas)}"
     return ws
 
-def generar(universo, matrices, eqd, salida, cambios=None):
+def generar(universo, matrices, eqd, salida, cambios=None, sin_clasificar=None):
     EQ = {k: v["cargo_hc"] for k, v in eqd.get("equivalencias", {}).items()}
     evald = defaultdict(list)
     for m in matrices:
@@ -199,12 +224,13 @@ def generar(universo, matrices, eqd, salida, cambios=None):
          ["N°", "Criterio", "Descripción"],
          [["1", "Fuente del head count", "Base nominal del head count del mes. La hoja se localiza automáticamente por sus encabezados; no se requiere tabla dinámica."],
           ["2", "Exclusión por área", "Se excluye el área 'Silvicultura - Abastecimiento' (personal de campo)."],
-          ["3", "Exclusión por jerarquía", "Se excluyen las jerarquías 'BC Workers' y 'BC Leaders' (personal operativo)."],
-          ["4", "Alcance geográfico", "Se incluyen las localidades Quevedo y Samborondón."],
-          ["5", "Exclusión por dependencia", "Se excluye al personal con Localidad Principal 'High Point'."],
-          ["6", "Cargos de frontera", "Se mantienen dentro del alcance Supervisor de Producción, Supervisor de Mantenimiento, Chofer, Mensajero, Aprendiz, Jefe de Bodega, Técnico de Inventario, Enfermera/o y Médico Ocupacional."],
-          ["7", "Unidad de análisis", "El cruce se realiza por el par ÁREA + CARGO, dado que existen cargos presentes en más de un área."],
-          ["8", "Normalización", "Se neutralizan mayúsculas, tildes, dobles espacios, terminaciones de género y errores de tipeo. Las equivalencias no evidentes están registradas en la hoja 5."]],
+          ["3", "Alcance geográfico", "Se incluyen las localidades Quevedo y Samborondón. Santo Domingo queda fuera del alcance de este control."],
+          ["4", "Exclusión por dependencia", "Se excluye al personal con Localidad Principal 'High Point'."],
+          ["5", "Clasificación administrativo / operativo", "Se aplica el catálogo de cargos 'cargos_administrativos.json', validado cargo por cargo. NO se utiliza la columna de jerarquía del head count: desde el corte de octubre de 2026 esa columna llega desalineada respecto al cargo (jefaturas clasificadas como BC Workers y operarios como Top Management), por lo que no es apta para delimitar el universo."],
+          ["6", "Cargos sin clasificar", "Un cargo que no figure en el catálogo queda FUERA del universo y se reporta en la hoja 'Cargos por clasificar', para su incorporación explícita."],
+          ["7", "Cargos de frontera", "Se mantienen dentro del alcance Supervisor de Producción, Supervisor de Mantenimiento, Chofer, Aprendiz, Jefe de Bodega, Técnico de Inventario, Enfermera/o y Médico."],
+          ["8", "Unidad de análisis", "El cruce se realiza por el par ÁREA + CARGO, dado que existen cargos presentes en más de un área."],
+          ["9", "Normalización", "Se neutralizan mayúsculas, tildes, dobles espacios, terminaciones de género y errores de tipeo. Las equivalencias no evidentes están registradas en la hoja 5."]],
          [6, 30, 110])
 
     cub = Counter(); tot = Counter(); pt = Counter(); pc = Counter()
@@ -240,29 +266,29 @@ def generar(universo, matrices, eqd, salida, cambios=None):
             if len({norm(e[2]) for e in ev}) == 1 and norm(noms) != v["norm"]:
                 obs.append("Denominación distinta entre matriz y head count (equivalencia validada)")
             if len({e[0] for e in ev}) > 1: obs.append("Evaluado en más de una matriz")
-            filas.append([area, cargo, v["n"], " / ".join(sorted(v["jer"])), " / ".join(sorted(v["loc"])),
+            filas.append([area, cargo, v["n"], " / ".join(sorted(v["cc"])), " / ".join(sorted(v["loc"])),
                           "ANALIZADO", cods, noms, sum(e[3] for e in ev), " | ".join(obs)])
         else:
-            filas.append([area, cargo, v["n"], " / ".join(sorted(v["jer"])), " / ".join(sorted(v["loc"])),
+            filas.append([area, cargo, v["n"], " / ".join(sorted(v["cc"])), " / ".join(sorted(v["loc"])),
                           "SIN ANALIZAR", "", "", 0, "Requiere elaboración de matriz IPERC"])
     ws = hoja(wb, "3. Matriz consolidada",
               "MATRIZ CONSOLIDADA: CARGOS DEL HEAD COUNT vs. CARGOS ANALIZADOS EN LAS MATRICES IPERC",
-              ["Área", "Cargo según head count", "N° personas", "Jerarquía", "Localidad", "Estado",
+              ["Área", "Cargo según head count", "N° personas", "Centro de costo", "Localidad", "Estado",
                "Código de matriz", "Denominación en la matriz", "Líneas de riesgo", "Observación"],
-              filas, [30, 42, 9, 18, 14, 14, 16, 42, 10, 48])
+              filas, [30, 42, 9, 32, 14, 14, 16, 42, 10, 48])
     for i in range(5, 5 + len(filas)):
         c = ws.cell(i, 6)
         if c.value == "ANALIZADO": c.font = FB(10, VD)
         else: c.font = FB(10, RJ); c.fill = fill("FCE4E4")
 
-    br = [[a, c, v["n"], " / ".join(sorted(v["jer"])), " / ".join(sorted(v["loc"])),
-           " / ".join(sorted(v["cc"])), "Elaborar matriz IPERC para el puesto", "", ""]
+    br = [[a, c, v["n"], " / ".join(sorted(v["loc"])), " / ".join(sorted(v["cc"])),
+           "Elaborar matriz IPERC para el puesto", "", ""]
           for (a, c), v in sorted(pares.items(), key=lambda x: (-x[1]["n"], x[0][0], x[0][1]))
           if v["norm"] not in evald]
     ws = hoja(wb, "4. Brechas", "BRECHAS DETECTADAS: CARGOS DEL HEAD COUNT SIN EVALUACIÓN DE RIESGOS",
-              ["Área", "Cargo sin analizar", "N° personas", "Jerarquía", "Localidad", "Centro de costo",
+              ["Área", "Cargo sin analizar", "N° personas", "Localidad", "Centro de costo",
                "Acción requerida", "Responsable", "Fecha compromiso"],
-              br, [28, 42, 9, 18, 13, 34, 38, 18, 14])
+              br, [28, 42, 9, 14, 34, 38, 18, 14])
     for i in range(5, 5 + len(br)): ws.cell(i, 2).font = FB(10, RJ)
 
     hcn = {v["norm"] for v in pares.values()}
@@ -274,12 +300,16 @@ def generar(universo, matrices, eqd, salida, cambios=None):
     for k, v in sorted(eqd.get("cargos_nuevos_no_en_headcount", {}).items()):
         eq.append([v.get("matriz", ""), k, "(no consta)", v.get("area_hc", ""),
                    "Cargo nuevo no registrado", v.get("estado", ""), v.get("accion", "")])
+    for k, v in sorted(eqd.get("cargos_regularizados", {}).items()):
+        eq.append([v.get("matriz", ""), k, k, v.get("area_hc", ""),
+                   "Regularizado - cerrado", v.get("estado", ""), v.get("accion", "")])
     for k, v in sorted(eqd.get("cargos_obsoletos_a_eliminar", {}).items()):
         eq.append([v.get("matriz", ""), k, "(no existe)", "", "Cargo obsoleto",
                    v.get("estado", ""), v.get("accion", "")])
     # puestos evaluados que este mes no encuentran cargo en el head count
     ya = {norm(k) for k in list(eqd.get("equivalencias", {})) +
                           list(eqd.get("cargos_nuevos_no_en_headcount", {})) +
+                          list(eqd.get("cargos_regularizados", {})) +
                           list(eqd.get("cargos_obsoletos_a_eliminar", {}))}
     for k, vs in sorted(evald.items()):
         if k not in hcn and norm(vs[0][2]) not in ya:
@@ -305,6 +335,17 @@ def generar(universo, matrices, eqd, salida, cambios=None):
         hoja(wb, "7. Cambios del mes", "CAMBIOS RESPECTO AL CORTE ANTERIOR",
              ["Tipo de cambio", "Área", "Cargo", "N° personas", "Estado de cobertura", "Acción sugerida"],
              cambios, [26, 30, 44, 11, 18, 52])
+
+    if sin_clasificar:
+        sc = [[a, c, sum(locs.values()), " / ".join(f"{k} ({v})" for k, v in sorted(locs.items())),
+               "FUERA del universo hasta su clasificación",
+               "Clasificar en cargos_administrativos.json como administrativo u operativo"]
+              for (a, c), locs in sorted(sin_clasificar.items(), key=lambda x: (-sum(x[1].values()), x[0]))]
+        ws = hoja(wb, "8. Cargos por clasificar",
+                  "CARGOS DEL HEAD COUNT QUE NO FIGURAN EN EL CATÁLOGO DE CLASIFICACIÓN",
+                  ["Área", "Cargo", "N° personas", "Localidad", "Situación", "Acción requerida"],
+                  sc, [28, 44, 11, 26, 34, 58])
+        for i in range(5, 5 + len(sc)): ws.cell(i, 2).font = FB(10, "EF6C00")
 
     wb.save(salida)
     return {"cargos": T, "cubiertos": C, "personas": PT, "personas_cub": PC,
@@ -375,7 +416,7 @@ def main():
     a = ap.parse_args()
 
     print("\n[1/4] Leyendo head count …")
-    universo = leer_headcount(a.hc)
+    universo, sin_clasificar = leer_headcount(a.hc)
     if not universo: sys.exit("ERROR: el universo quedo vacio. Revisa los criterios o el archivo.")
 
     if a.matrices:
@@ -413,14 +454,17 @@ def main():
     f = os.path.join(BASE, "equivalencias.json")
     if os.path.exists(f): eqd = json.load(open(f, encoding="utf-8"))
     else: print("  AVISO: no se hallo equivalencias.json; el cruce sera solo por nombre exacto.")
-    res = generar(universo, matrices, eqd, a.out, cambios)
+    res = generar(universo, matrices, eqd, a.out, cambios, sin_clasificar)
 
     print(f"\n  Archivo generado: {a.out}")
     print(f"  Cobertura: {res['cubiertos']}/{res['cargos']} cargos "
           f"({round(100*res['cubiertos']/res['cargos'])}%)  |  "
           f"{res['personas_cub']}/{res['personas']} personas")
     print(f"  Brechas: {res['brechas']}  |  Observaciones: {res['observaciones']}  |  "
-          f"Matrices: {res['matrices']}\n")
+          f"Matrices: {res['matrices']}")
+    if sin_clasificar:
+        print(f"  Cargos por clasificar: {len(sin_clasificar)} (hoja 8)")
+    print()
 
 if __name__ == "__main__":
     main()
