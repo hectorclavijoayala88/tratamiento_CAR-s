@@ -78,7 +78,7 @@ compara con la del mes anterior. Detecta en ambos sentidos:
 Se excluye del head count:
 
 - Área `Silvicultura - Abastecimiento` (personal de campo)
-- Localidades distintas de Quevedo y Samborondón (Santo Domingo queda fuera)
+- Localidades distintas de Quevedo y Samborondón
 - Personal con Localidad Principal `High Point`
 - Cargos clasificados como operativos en `analisis/cargos_administrativos.json`
 
@@ -89,19 +89,31 @@ Para cambiar un criterio geográfico o de área, edita las constantes al inicio 
 
 ### Por qué no se usa la columna de jerarquía
 
-Hasta septiembre de 2026 el universo se delimitaba excluyendo las jerarquías
-`BC Workers` y `BC Leaders`. **Ese criterio se abandonó**: desde el corte de octubre
-de 2026 el head count entrega esa columna desalineada respecto al cargo. En ese
-archivo el Gerente General, el Director de Operaciones y el Director Financiero
-aparecen como `BC Workers`, los únicos dos `Top Management` son un Operador
-Industrial y un Auxiliar de Producción, y `TRABAJADOR FORESTAL` se reparte entre
-ocho jerarquías distintas. De 119 cargos comunes con el corte anterior, 111
-cambiaron de clasificación.
+El universo se delimitaba antes excluyendo las jerarquías `BC Workers` y
+`BC Leaders`. **Ese criterio se abandonó** porque el head count no siempre entrega
+esa columna de forma confiable. Un archivo recibido en octubre de 2026 la traía
+desalineada respecto al cargo: el Gerente General, el Director de Operaciones y
+el Director Financiero figuraban como `BC Workers`, los dos únicos
+`Top Management` eran un Operador Industrial y un Auxiliar de Producción, y
+`TRABAJADOR FORESTAL` se repartía entre ocho jerarquías. Ese archivo se descartó
+por completo.
 
-La clasificación se sostiene ahora en el catálogo de cargos, validado cargo por
-cargo. Un cargo que no figure en él queda **fuera** del universo y se reporta en
+La clasificación se sostiene ahora en el catálogo de cargos, construido a partir
+del head count V1.1 y validado cargo por cargo. Da el mismo universo que daba el
+filtro por jerarquía sobre ese archivo (101 personas, 70 pares área-cargo), pero
+no depende de una columna que puede llegar corrupta.
+
+Un cargo que no figure en el catálogo queda **fuera** del universo y se reporta en
 la hoja `8. Cargos por clasificar`, para que la decisión sea explícita y no un
 descarte silencioso.
+
+### Control de salud del archivo
+
+Si el head count trae columna de jerarquía, el script la contrasta con el catálogo:
+cuando más del 30% de los cargos administrativos aparecen marcados como
+`BC Workers` o `BC Leaders`, avisa en pantalla que esa columna llegó inconsistente.
+El análisis no se detiene, porque la clasificación no depende de ella, pero el aviso
+sirve para reclamar la corrección a quien genera el archivo.
 
 ### Clasificar un cargo nuevo
 
@@ -134,12 +146,12 @@ alimentan la hoja de observaciones.
 
 ## Estado del último corte
 
-Corte de octubre de 2026:
+Head count V1.1:
 
-- **57 de 71 cargos** analizados (80%)
-- **79 de 99 personas** cubiertas (80%)
+- **55 de 70 cargos** analizados (79%)
+- **80 de 101 personas** cubiertas (79%)
 - **17 matrices** procesadas
-- Áreas conformes: ESG/Lab, Engicore, QSE & Operational Excellence
+- Áreas conformes: ADM-L&RH, ESG/Lab, Engicore, QSE & Operational Excellence
 
 ## Archivos
 

@@ -31,6 +31,12 @@
    "matriz": "GE-SO-PGS-D1",
    "nota": "Mismo puesto"
   },
+  "AUXILIAR DE SERVICIOS DE SALUD": {
+   "cargo_hc": "AUXILIAR ADMINISTRATIVO",
+   "area_hc": "ADM-L&RH",
+   "matriz": "GE-SO-SF-D1",
+   "nota": "En el head count consta como AUXILIAR ADMINISTRATIVO. La denominacion 'Auxiliar de servicios de salud' se uso solo a efectos de la matriz de Salud Ocupacional. Corresponde al auxiliar administrativo asignado a ADM-L&RH (1 persona); los 5 de Operaciones estan cubiertos por GE-SO-MA-D1."
+  },
   "ANALISTA COMPRAS": {
    "cargo_hc": "ANALISTA DE COMPRAS",
    "area_hc": "Operaciones",
@@ -48,12 +54,21 @@
    "area_hc": "Operaciones",
    "matriz": "GE-SO-SC-D1",
    "nota": "Mismo puesto, confirmado por Hector"
+  }
+ },
+ "cargos_nuevos_no_en_headcount": {
+  "JEFE DE CONTABILIDAD E IMPUESTOS": {
+   "area_hc": "IT&FIN",
+   "matriz": "GE-SO-FI-D1",
+   "estado": "ANALIZADO en matriz / NO CONSTA en head count V1.1",
+   "accion": "Incorporar el cargo a la base de head count"
   },
-  "MEDICO OCUPACIONAL": {
-   "cargo_hc": "MEDICO",
+  "PEOPLE OPERATIONS PARTNER": {
    "area_hc": "ADM-L&RH",
-   "matriz": "GE-SO-SF-D1",
-   "nota": "El head count de octubre 2026 renombro el cargo de MEDICO OCUPACIONAL a MEDICO"
+   "matriz": "GE-SO-TH-D1",
+   "lineas_riesgo": 42,
+   "estado": "ANALIZADO en matriz / NO CONSTA en head count V1.1",
+   "accion": "Incorporar el cargo a la base de head count"
   }
  },
  "cargos_obsoletos_a_eliminar": {
@@ -68,26 +83,6 @@
   "COORDINADOR DE EXCELENCIA OPERACIONAL": {
    "area_hc": "QSE & Operational Excellence",
    "estado": "TIENE MATRIZ PROPIA - PENDIENTE DE RECIBIR"
-  }
- },
- "cargos_regularizados": {
-  "JEFE DE CONTABILIDAD E IMPUESTOS": {
-   "area_hc": "IT&FIN",
-   "matriz": "GE-SO-FI-D1",
-   "estado": "REGULARIZADO - consta en el head count de octubre 2026",
-   "accion": "Ninguna. Accion correctiva cumplida."
-  },
-  "PEOPLE OPERATIONS PARTNER": {
-   "area_hc": "ADM-L&RH",
-   "matriz": "GE-SO-TH-D1",
-   "estado": "REGULARIZADO - consta en el head count de octubre 2026",
-   "accion": "Ninguna. Accion correctiva cumplida."
-  },
-  "AUXILIAR DE SERVICIOS DE SALUD": {
-   "area_hc": "ADM-L&RH",
-   "matriz": "GE-SO-SF-D1",
-   "estado": "REGULARIZADO - consta en el head count de octubre 2026 con la misma denominacion de la matriz",
-   "accion": "Ninguna. Accion correctiva cumplida."
   }
  }
 }

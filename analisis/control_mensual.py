@@ -123,6 +123,18 @@ def leer_headcount(path):
                          "localidad": G(r, "localidad"), "localidadP": G(r, "localidadP")})
     print(f"  Registros leidos: {total}  ->  dentro del alcance: {incl}")
     for m, n in motivos.most_common(): print(f"     - excluidos por {m}: {n}")
+    # control de salud del archivo: la jerarquia del head count debe ser coherente
+    # con el catalogo. Si no lo es, el archivo llego con esa columna desalineada.
+    if "jerarquia" in idx and universo:
+        OPERATIVAS = {"BC WORKERS", "BC LEADERS"}
+        mal = sum(1 for r in universo if norm(r["jerarquia"]) in OPERATIVAS)
+        if universo and mal / len(universo) > 0.30:
+            print(f"  ATENCION: {mal} de {len(universo)} cargos administrativos vienen marcados")
+            print(f"            como BC Workers/BC Leaders en la columna de jerarquia.")
+            print(f"            Esa columna llego INCONSISTENTE; no afecta este analisis porque")
+            print(f"            la clasificacion se toma del catalogo, pero conviene reportarlo")
+            print(f"            a quien genera el head count.")
+
     if sin_clasificar:
         print(f"  ATENCION: {len(sin_clasificar)} cargo(s) sin clasificar quedaron FUERA del universo.")
         print(f"            Se listan en la hoja 'Cargos por clasificar' del consolidado.")
