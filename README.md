@@ -148,8 +148,8 @@ alimentan la hoja de observaciones.
 
 Head count V1.1:
 
-- **55 de 70 cargos** analizados (79%)
-- **80 de 101 personas** cubiertas (79%)
+- **56 de 70 cargos** analizados (80%)
+- **81 de 101 personas** cubiertas (80%)
 - **17 matrices** procesadas
 - Áreas conformes: ADM-L&RH, ESG/Lab, Engicore, QSE & Operational Excellence
 

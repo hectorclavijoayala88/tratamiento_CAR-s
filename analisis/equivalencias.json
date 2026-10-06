@@ -54,6 +54,12 @@
    "area_hc": "Operaciones",
    "matriz": "GE-SO-SC-D1",
    "nota": "Mismo puesto, confirmado por Hector"
+  },
+  "JEFE DE PRODUCCION (MV Y SECADO)": {
+   "cargo_hc": "JEFE DE PRODUCCION",
+   "area_hc": "Operaciones",
+   "matriz": "GE-SO-RL-D35",
+   "nota": "Mismo puesto, confirmado por Hector. La matriz precisa entre parentesis las lineas que atiende (MV y Secado)"
   }
  },
  "cargos_nuevos_no_en_headcount": {
