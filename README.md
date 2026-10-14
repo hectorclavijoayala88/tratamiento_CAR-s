@@ -166,12 +166,12 @@ alimentan la hoja de observaciones.
 
 ## Estado del último corte
 
-Head count V1.1:
+Head count de octubre de 2026:
 
-- **56 de 70 cargos** analizados (80%)
-- **81 de 101 personas** cubiertas (80%)
+- **58 de 71 cargos** analizados (82%)
+- **80 de 99 personas** cubiertas (81%)
 - **17 matrices** procesadas
-- Áreas conformes: ADM-L&RH, ESG/Lab, Engicore, QSE & Operational Excellence
+- Áreas conformes: ESG/Lab, Engicore, QSE & Operational Excellence
 
 ## Archivos
 

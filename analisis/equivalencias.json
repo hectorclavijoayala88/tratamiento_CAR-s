@@ -74,21 +74,6 @@
    "nota": "El head count de octubre 2026 renombro el cargo de MEDICO OCUPACIONAL a MEDICO. Se aceptan ambas denominaciones."
   }
  },
- "cargos_nuevos_no_en_headcount": {
-  "JEFE DE CONTABILIDAD E IMPUESTOS": {
-   "area_hc": "IT&FIN",
-   "matriz": "GE-SO-FI-D1",
-   "estado": "ANALIZADO en matriz / NO CONSTA en head count V1.1",
-   "accion": "Incorporar el cargo a la base de head count"
-  },
-  "PEOPLE OPERATIONS PARTNER": {
-   "area_hc": "ADM-L&RH",
-   "matriz": "GE-SO-TH-D1",
-   "lineas_riesgo": 42,
-   "estado": "ANALIZADO en matriz / NO CONSTA en head count V1.1",
-   "accion": "Incorporar el cargo a la base de head count"
-  }
- },
  "cargos_obsoletos_a_eliminar": {
   "COORDINADOR DE TESORERIA": {
    "matriz": "GE-SO-FI-D1",
@@ -101,6 +86,26 @@
   "COORDINADOR DE EXCELENCIA OPERACIONAL": {
    "area_hc": "QSE & Operational Excellence",
    "estado": "TIENE MATRIZ PROPIA - PENDIENTE DE RECIBIR"
+  }
+ },
+ "cargos_regularizados": {
+  "JEFE DE CONTABILIDAD E IMPUESTOS": {
+   "area_hc": "IT&FIN",
+   "matriz": "GE-SO-FI-D1",
+   "estado": "REGULARIZADO - consta en el head count de octubre 2026",
+   "accion": "Ninguna. Accion correctiva cumplida."
+  },
+  "PEOPLE OPERATIONS PARTNER": {
+   "area_hc": "ADM-L&RH",
+   "matriz": "GE-SO-TH-D1",
+   "estado": "REGULARIZADO - consta en el head count de octubre 2026",
+   "accion": "Ninguna. Accion correctiva cumplida."
+  },
+  "AUXILIAR DE SERVICIOS DE SALUD": {
+   "area_hc": "ADM-L&RH",
+   "matriz": "GE-SO-SF-D1",
+   "estado": "REGULARIZADO - consta en el head count de octubre 2026 con la denominacion de la matriz",
+   "accion": "Ninguna. Accion correctiva cumplida."
   }
  }
 }
