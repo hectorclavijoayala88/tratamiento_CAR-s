@@ -215,12 +215,19 @@ def hoja(wb, nombre, titulo, cols, filas, anchos):
     return ws
 
 def generar(universo, matrices, eqd, salida, cambios=None, sin_clasificar=None):
-    EQ = {k: v["cargo_hc"] for k, v in eqd.get("equivalencias", {}).items()}
+    # cargo_hc puede ser una denominacion o una lista de denominaciones equivalentes:
+    # un mismo puesto evaluado cubre al cargo tanto si el head count lo nombra de la
+    # forma anterior como de la nueva, de modo que un renombre no abre una brecha falsa.
+    EQ = {}
+    for k, v in eqd.get("equivalencias", {}).items():
+        d = v["cargo_hc"]
+        EQ[k] = [d] if isinstance(d, str) else list(d)
     evald = defaultdict(list)
     for m in matrices:
         for pu, n in m["puestos"].items():
-            k = norm(pu); k = norm(EQ.get(k, k))
-            evald[k].append((m["codigo"], m["proceso"], pu, n))
+            k = norm(pu)
+            for destino in EQ.get(k, [k]):
+                evald[norm(destino)].append((m["codigo"], m["proceso"], pu, n))
 
     pares = OrderedDict()
     for r in universo:
@@ -306,8 +313,9 @@ def generar(universo, matrices, eqd, salida, cambios=None, sin_clasificar=None):
     hcn = {v["norm"] for v in pares.values()}
     eq = []
     for k, v in sorted(eqd.get("equivalencias", {}).items()):
-        eq.append([v.get("matriz", ""), k, v["cargo_hc"], v.get("area_hc", ""),
-                   "Equivalencia de denominación", v.get("nota", ""),
+        d = v["cargo_hc"]
+        eq.append([v.get("matriz", ""), k, d if isinstance(d, str) else " / ".join(d),
+                   v.get("area_hc", ""), "Equivalencia de denominación", v.get("nota", ""),
                    "Unificar la denominación en la matriz según el head count"])
     for k, v in sorted(eqd.get("cargos_nuevos_no_en_headcount", {}).items()):
         eq.append([v.get("matriz", ""), k, "(no consta)", v.get("area_hc", ""),

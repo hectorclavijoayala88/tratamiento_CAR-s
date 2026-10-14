@@ -32,10 +32,13 @@
    "nota": "Mismo puesto"
   },
   "AUXILIAR DE SERVICIOS DE SALUD": {
-   "cargo_hc": "AUXILIAR ADMINISTRATIVO",
+   "cargo_hc": [
+    "AUXILIAR DE SERVICIOS DE SALUD",
+    "AUXILIAR ADMINISTRATIVO"
+   ],
    "area_hc": "ADM-L&RH",
    "matriz": "GE-SO-SF-D1",
-   "nota": "En el head count consta como AUXILIAR ADMINISTRATIVO. La denominacion 'Auxiliar de servicios de salud' se uso solo a efectos de la matriz de Salud Ocupacional. Corresponde al auxiliar administrativo asignado a ADM-L&RH (1 persona); los 5 de Operaciones estan cubiertos por GE-SO-MA-D1."
+   "nota": "El head count de octubre 2026 adopto la denominacion de la matriz; antes constaba como AUXILIAR ADMINISTRATIVO. Se aceptan ambas."
   },
   "ANALISTA COMPRAS": {
    "cargo_hc": "ANALISTA DE COMPRAS",
@@ -60,6 +63,15 @@
    "area_hc": "Operaciones",
    "matriz": "GE-SO-RL-D35",
    "nota": "Mismo puesto, confirmado por Hector. La matriz precisa entre parentesis las lineas que atiende (MV y Secado)"
+  },
+  "MEDICO OCUPACIONAL": {
+   "cargo_hc": [
+    "MEDICO OCUPACIONAL",
+    "MEDICO"
+   ],
+   "area_hc": "ADM-L&RH",
+   "matriz": "GE-SO-SF-D1",
+   "nota": "El head count de octubre 2026 renombro el cargo de MEDICO OCUPACIONAL a MEDICO. Se aceptan ambas denominaciones."
   }
  },
  "cargos_nuevos_no_en_headcount": {
