@@ -44,6 +44,26 @@ Opciones:
 
 Requiere `openpyxl` (`pip install openpyxl`).
 
+### Si el head count llega solo como tabla dinámica
+
+Algunos meses el head count no llega como archivo, sino como una tabla dinámica de
+centro de costo y cargo (una imagen, por ejemplo). Para ese caso:
+
+```bash
+python3 analisis/cruce_tabla.py --tabla hc_tabla_octubre_2026.txt
+```
+
+El archivo de entrada es texto plano, una línea por par:
+
+```
+1200 PLANTATION MANAGEMENT|COORDINADOR DE SEGURIDAD FISICA
+5800 GENERAL MANAGEMENT|GERENTE GENERAL
+```
+
+El resultado se expresa **en cargos, no en personas**: la tabla no trae la dotación
+ni la columna de área, de modo que la pertenencia al alcance se determina por centro
+de costo. Para la cobertura en personas hace falta el archivo Excel.
+
 ## Qué genera
 
 `Cobertura_IPERC_Administrativos_CAR.xlsx`
@@ -158,6 +178,7 @@ Head count V1.1:
 | Archivo | Función |
 |---|---|
 | `analisis/control_mensual.py` | Script único del control mensual |
+| `analisis/cruce_tabla.py` | Cruce para los meses en que el head count llega solo como tabla dinámica |
 | `analisis/catalogo_matrices.json` | Puestos extraídos de cada matriz IPERC, para no volver a subirlas |
 | `analisis/cargos_administrativos.json` | Clasificación administrativo / operativo de cada cargo |
 | `analisis/equivalencias.json` | Equivalencias y hallazgos documentales validados |
