@@ -44,6 +44,18 @@ Opciones:
 
 Requiere `openpyxl` (`pip install openpyxl`).
 
+### Resumen ejecutivo
+
+A partir del consolidado ya generado:
+
+```bash
+python3 analisis/resumen_ejecutivo.py
+```
+
+Produce `Resumen_Ejecutivo_Cobertura_IPERC.xlsx` con los indicadores principales,
+la cobertura por área con barras, las brechas ordenadas por personas expuestas y
+el estado de las acciones correctivas.
+
 ### Si el head count llega solo como tabla dinámica
 
 Algunos meses el head count no llega como archivo, sino como una tabla dinámica de
@@ -179,6 +191,7 @@ Head count de octubre de 2026:
 |---|---|
 | `analisis/control_mensual.py` | Script único del control mensual |
 | `analisis/cruce_tabla.py` | Cruce para los meses en que el head count llega solo como tabla dinámica |
+| `analisis/resumen_ejecutivo.py` | Resumen de una página a partir del consolidado, para presentar |
 | `analisis/catalogo_matrices.json` | Puestos extraídos de cada matriz IPERC, para no volver a subirlas |
 | `analisis/cargos_administrativos.json` | Clasificación administrativo / operativo de cada cargo |
 | `analisis/equivalencias.json` | Equivalencias y hallazgos documentales validados |
