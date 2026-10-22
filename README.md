@@ -180,9 +180,9 @@ alimentan la hoja de observaciones.
 
 Head count de octubre de 2026:
 
-- **58 de 71 cargos** analizados (82%)
-- **80 de 99 personas** cubiertas (81%)
-- **17 matrices** procesadas
+- **59 de 71 cargos** analizados (83%)
+- **87 de 99 personas** cubiertas (88%)
+- **18 matrices** procesadas
 - Áreas conformes: ESG/Lab, Engicore, QSE & Operational Excellence
 
 ## Archivos

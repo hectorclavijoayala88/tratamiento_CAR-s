@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-06",
+ "actualizado": "2026-10-22",
  "matrices": [
   {
    "codigo": "GE-SO-FI-D1",
@@ -195,6 +195,15 @@
    },
    "filas_datos": 60,
    "archivo": "fe6c6893-Matriz_IPERC_Plantabal_Operations_Mng_Staff.xlsx"
+  },
+  {
+   "codigo": "GE-SO-PD-D2",
+   "proceso": "Supervisor de producción",
+   "puestos": {
+    "Supervisor de producción": 76
+   },
+   "filas_datos": 76,
+   "archivo": "92b21579-GE-SO-PD-D2_-_Supervisores_de_Producci_n.xlsx"
   }
  ]
 }
